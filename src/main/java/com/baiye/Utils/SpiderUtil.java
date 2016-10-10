@@ -1,4 +1,4 @@
-package com.baiye.Utils;
+package com.baiye.utils;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.codec.binary.Base64;

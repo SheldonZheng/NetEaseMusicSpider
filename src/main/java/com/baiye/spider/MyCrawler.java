@@ -1,7 +1,8 @@
 package com.baiye.spider;
 
-import com.baiye.Utils.MD5Util;
-import com.baiye.Utils.SpiderUtil;
+import com.baiye.utils.AuthData;
+import com.baiye.utils.MD5Util;
+import com.baiye.utils.SpiderUtil;
 import com.baiye.entity.Music;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
@@ -25,7 +26,6 @@ public class MyCrawler extends WebCrawler{
 
     private int repeatCount = 0;
 
-    private ConcurrentHashMap<String,String> authMap = new ConcurrentHashMap<String, String>();
 
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp3|zip|gz))$");
 
@@ -48,10 +48,8 @@ public class MyCrawler extends WebCrawler{
 
         if(url.indexOf("song?id") > 0)
         {
-        String md5 = MD5Util.getMD5(url.getBytes());
-        if(authMap.get(md5) != null && !authMap.get(md5).equals("1"))
+        if(AuthData.authData(url))
         {
-            authMap.put(md5,"1");
             if(page.getParseData() instanceof HtmlParseData)
             {
                 Music music = new Music();

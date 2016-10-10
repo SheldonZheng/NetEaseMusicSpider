@@ -1,4 +1,4 @@
-package com.baiye.Utils;
+package com.baiye.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

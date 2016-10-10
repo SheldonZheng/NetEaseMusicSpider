@@ -1,4 +1,4 @@
-package com.baiye.Utils;
+package com.baiye.utils;
 
 public class MD5Util {
 
