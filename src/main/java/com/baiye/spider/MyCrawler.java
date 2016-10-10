@@ -1,4 +1,4 @@
-package com.baiye.test;
+package com.baiye.spider;
 
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;

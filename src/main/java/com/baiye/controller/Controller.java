@@ -1,5 +1,6 @@
-package com.baiye.test;
+package com.baiye.controller;
 
+import com.baiye.spider.MyCrawler;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
