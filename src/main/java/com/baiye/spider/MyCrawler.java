@@ -1,5 +1,6 @@
 package com.baiye.spider;
 
+import com.baiye.Utils.SpiderUtil;
 import com.baiye.entity.Music;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
@@ -19,6 +20,8 @@ public class MyCrawler extends WebCrawler{
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp3|zip|gz))$");
 
     private final static List<Music> musics = new ArrayList<Music>();
+
+    private final static SpiderUtil spiderUtil = new SpiderUtil();
 
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
@@ -64,12 +67,16 @@ public class MyCrawler extends WebCrawler{
                 String albumName = text.substring(albumNameIndexStart,albumNameIndexEnd).trim();
                 music.setAlbumName(albumName);
 
-                int commentCountIndexStart = text.indexOf("评论共") + 3;
+                /*int commentCountIndexStart = text.indexOf("评论共") + 3;
                 int commentCountIndexEnd = text.indexOf("条评论");
                 String commentCount = text.substring(commentCountIndexStart,commentCountIndexEnd);
-                music.setCommentCount(commentCount);
+                music.setCommentCount(commentCount);*/
+
+                String commentCount = spiderUtil.getCommentCount(url);
 
                 music.setSongURL(url);
+
+                music.setCommentCount(commentCount);
 
                 System.out.println(music.toString());
 

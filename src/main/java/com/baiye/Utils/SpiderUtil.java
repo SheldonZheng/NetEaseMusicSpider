@@ -12,11 +12,12 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Map;
 
 /**
  * Created by Baiye on 2016/10/10.
  */
-public class SpiederUtil {
+public class SpiderUtil {
 
     public static final String text = "{\"username\": \"\", \"rememberLogin\": \"true\", \"password\": \"\"}";
 
@@ -31,36 +32,35 @@ public class SpiederUtil {
 
     public static void main(String[] args) throws Exception {
 
-        SpiederUtil ut = new SpiederUtil();
-        ut.getCommentCount("5179544","http://music.163.com/song?id=5179544");
+        SpiderUtil ut = new SpiderUtil();
+        System.out.println(ut.getCommentCount("http://music.163.com/song?id=5179544"));
 
     }
 
-    private Long getCommentCount(String id,String baesURL) throws Exception {
-        String secKey = new BigInteger(100, new SecureRandom()).toString(32).substring(0, 16);
-        String encText = aesEncrypt(aesEncrypt(text, "0CoJUm6Qyw8W8jud"), secKey);
-        String encSecKey = rsaEncrypt(secKey);
-        Connection.Response response = Jsoup
-                .connect("http://music.163.com/weapi/v1/resource/comments/R_SO_4_" + id + "/?csrf_token=")
-                .method(Connection.Method.POST).header("Referer", baesURL)
-                .data(ImmutableMap.of("params", encText, "encSecKey", encSecKey)).execute();
+    public String getCommentCount(String baesURL) {
+        try
+        {
+            String id = baesURL.substring(baesURL.indexOf("=") + 1,baesURL.length());
+            String secKey = new BigInteger(100, new SecureRandom()).toString(32).substring(0, 16);
+            String encText = aesEncrypt(aesEncrypt(text, "0CoJUm6Qyw8W8jud"), secKey);
+            String encSecKey = rsaEncrypt(secKey);
+            Connection.Response response = Jsoup
+                    .connect("http://music.163.com/weapi/v1/resource/comments/R_SO_4_" + id + "/?csrf_token=")
+                    .method(Connection.Method.POST).header("Referer", baesURL)
+                    .data(ImmutableMap.of("params", encText, "encSecKey", encSecKey)).execute();
 
+            Map<String,Object> result = JsonUtil.fromJson(response.body(),Map.class);
+            return result.get("total").toString();
+        }
+        catch (Exception e)
+        {
 
-        System.out.println(response.body());
-
-        return 1L;
+        }
+        return null;
     }
 
 
-    public void test() throws Exception {
-        String secKey = new BigInteger(100, new SecureRandom()).toString(32).substring(0, 16);
-        String encText = aesEncrypt(aesEncrypt(text, "0CoJUm6Qyw8W8jud"), secKey);
-        String encSecKey = rsaEncrypt(secKey);
-        String key = ImmutableMap.of("params", encText, "encSecKey", encSecKey).toString();
-        System.out.println(encText);
-        System.out.println(encSecKey);
-        System.out.println(key);
-    }
+
 
     private String rsaEncrypt(String value) throws UnsupportedEncodingException {
         value = new StringBuilder(value).reverse().toString();

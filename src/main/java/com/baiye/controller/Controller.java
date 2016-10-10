@@ -14,7 +14,7 @@ public class Controller {
 
     public static void main(String[] args) throws Exception {
 
-        String crawlStorageFolder = "D:\\SpiderData";
+        String crawlStorageFolder = args[0];
         int numberOfCrawlers = 7;
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
@@ -26,7 +26,7 @@ public class Controller {
 
 
       //  controller.addSeed("http://music.163.com/");
-        controller.addSeed(" http://music.163.com/song?id=5179544");
+        controller.addSeed(" http://music.163.com/");
 
         controller.start(MyCrawler.class,numberOfCrawlers);
     }
