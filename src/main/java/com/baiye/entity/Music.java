@@ -54,4 +54,15 @@ public class Music {
     public void setSongURL(String songURL) {
         this.songURL = songURL;
     }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Name : " + this.getName() + "\t");
+        sb.append("Artist : "+ this.getArtistName() + "\t");
+        sb.append("Album : " + this.getAlbumName() + "\t");
+        sb.append("CommentCount : " + this.getCommentCount() + "\t");
+        sb.append("URL : " + this.getSongURL() + "\t");
+        return sb.toString();
+    }
 }

@@ -25,7 +25,8 @@ public class Controller {
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 
 
-        controller.addSeed("http://music.163.com/#/discover/playlist/");
+      //  controller.addSeed("http://music.163.com/");
+        controller.addSeed(" http://music.163.com/song?id=5179544");
 
         controller.start(MyCrawler.class,numberOfCrawlers);
     }

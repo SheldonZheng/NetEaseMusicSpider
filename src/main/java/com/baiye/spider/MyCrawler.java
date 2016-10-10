@@ -1,10 +1,13 @@
 package com.baiye.spider;
 
+import com.baiye.entity.Music;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -14,6 +17,8 @@ import java.util.regex.Pattern;
 public class MyCrawler extends WebCrawler{
 
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp3|zip|gz))$");
+
+    private final static List<Music> musics = new ArrayList<Music>();
 
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
@@ -32,6 +37,7 @@ public class MyCrawler extends WebCrawler{
         {
             if(page.getParseData() instanceof HtmlParseData)
             {
+                Music music = new Music();
                 HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
                 String text = htmlParseData.getText();
                 String html = htmlParseData.getHtml();
@@ -46,13 +52,30 @@ public class MyCrawler extends WebCrawler{
                 int musicNameIndexStart = text.indexOf("生成外链播放器") + 8;
                 int musicNameIndexEnd = text.indexOf("歌手");
                 String musicName = text.substring(musicNameIndexStart,musicNameIndexEnd).trim();
-                System.out.println(musicName);
+                music.setName(musicName);
 
                 int artistNameIndexStart = text.indexOf("歌手：") + 3;
-                int artistNameIndexEnd = text.indexOf("所属专辑");
+                int artistNameIndexEnd = text.indexOf("所属专辑：");
                 String artistName = text.substring(artistNameIndexStart,artistNameIndexEnd).trim();
-                System.out.println(artistName);
+                music.setArtistName(artistName);
 
+                int albumNameIndexStart = text.indexOf("所属专辑：") + 5;
+                int albumNameIndexEnd = text.indexOf("播放",albumNameIndexStart);
+                String albumName = text.substring(albumNameIndexStart,albumNameIndexEnd).trim();
+                music.setAlbumName(albumName);
+
+                int commentCountIndexStart = text.indexOf("评论共") + 3;
+                int commentCountIndexEnd = text.indexOf("条评论");
+                String commentCount = text.substring(commentCountIndexStart,commentCountIndexEnd);
+                music.setCommentCount(commentCount);
+
+                music.setSongURL(url);
+
+                System.out.println(music.toString());
+
+                musics.add(music);
+
+                System.out.println(musics.size());
 
             }
         }
