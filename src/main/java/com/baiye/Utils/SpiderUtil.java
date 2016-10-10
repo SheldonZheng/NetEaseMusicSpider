@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.codec.binary.Base64;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -18,6 +20,9 @@ import java.util.Map;
  * Created by Baiye on 2016/10/10.
  */
 public class SpiderUtil {
+
+
+    private Logger logger = LoggerFactory.getLogger(SpiderUtil.class);
 
     public static final String text = "{\"username\": \"\", \"rememberLogin\": \"true\", \"password\": \"\"}";
 
@@ -54,7 +59,7 @@ public class SpiderUtil {
         }
         catch (Exception e)
         {
-
+            logger.error("getCommentCountError : " + e.getMessage());
         }
         return null;
     }

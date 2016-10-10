@@ -6,6 +6,8 @@ import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.regex.Pattern;
  * Created by Baiye on 2016/10/10.
  */
 public class MyCrawler extends WebCrawler{
+
+    private Logger logger = LoggerFactory.getLogger(MyCrawler.class);
 
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp3|zip|gz))$");
 
@@ -78,11 +82,11 @@ public class MyCrawler extends WebCrawler{
 
                 music.setCommentCount(commentCount);
 
-                System.out.println(music.toString());
+                logger.info(music.toString());
 
                 musics.add(music);
 
-                System.out.println(musics.size());
+                logger.info("musics.size：" + musics.size());
 
             }
         }

@@ -6,14 +6,18 @@ import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Baiye on 2016/10/10.
  */
 public class Controller {
 
+
     public static void main(String[] args) throws Exception {
 
+        Logger logger = LoggerFactory.getLogger(Controller.class);
         String crawlStorageFolder = args[0];
         int numberOfCrawlers = 7;
         CrawlConfig config = new CrawlConfig();
@@ -28,6 +32,8 @@ public class Controller {
       //  controller.addSeed("http://music.163.com/");
         controller.addSeed(" http://music.163.com/");
 
+
+        logger.info("Spider Started.");
         controller.start(MyCrawler.class,numberOfCrawlers);
     }
 }
