@@ -1,5 +1,6 @@
 package com.baiye.spider;
 
+import com.baiye.Utils.MD5Util;
 import com.baiye.Utils.SpiderUtil;
 import com.baiye.entity.Music;
 import edu.uci.ics.crawler4j.crawler.Page;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 /**
@@ -20,6 +22,10 @@ import java.util.regex.Pattern;
 public class MyCrawler extends WebCrawler{
 
     private Logger logger = LoggerFactory.getLogger(MyCrawler.class);
+
+    private int repeatCount = 0;
+
+    private ConcurrentHashMap<String,String> authMap = new ConcurrentHashMap<String, String>();
 
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp3|zip|gz))$");
 
@@ -42,6 +48,10 @@ public class MyCrawler extends WebCrawler{
 
         if(url.indexOf("song?id") > 0)
         {
+        String md5 = MD5Util.getMD5(url.getBytes());
+        if(authMap.get(md5) != null && !authMap.get(md5).equals("1"))
+        {
+            authMap.put(md5,"1");
             if(page.getParseData() instanceof HtmlParseData)
             {
                 Music music = new Music();
@@ -86,9 +96,28 @@ public class MyCrawler extends WebCrawler{
 
                 musics.add(music);
 
-                logger.info("musics.size：" + musics.size());
+                int allCount = 0;
+                int tempCount = 0;
+
+                allCount = musics.size() + tempCount;
+
+                if(musics.size() > 10000)
+                {
+                    tempCount += musics.size();
+                    musics.clear();
+                }
+
+
+                logger.info("AllCount：" + allCount);
 
             }
+        }
+        else
+        {
+            ++repeatCount;
+            logger.info("重复数据：" + repeatCount);
+        }
+
         }
     }
 }
