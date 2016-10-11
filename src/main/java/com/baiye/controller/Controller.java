@@ -1,6 +1,6 @@
 package com.baiye.controller;
 
-import com.baiye.spider.MyCrawler;
+import com.baiye.spider.MusicCrawler;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
@@ -34,6 +34,6 @@ public class Controller {
 
 
         logger.info("Spider Started.");
-        controller.start(MyCrawler.class,numberOfCrawlers);
+        controller.start(MusicCrawler.class,numberOfCrawlers);
     }
 }

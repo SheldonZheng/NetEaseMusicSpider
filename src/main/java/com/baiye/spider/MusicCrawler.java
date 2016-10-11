@@ -1,7 +1,6 @@
 package com.baiye.spider;
 
 import com.baiye.utils.AuthData;
-import com.baiye.utils.MD5Util;
 import com.baiye.utils.SpiderUtil;
 import com.baiye.entity.Music;
 import edu.uci.ics.crawler4j.crawler.Page;
@@ -14,15 +13,14 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 /**
  * Created by Baiye on 2016/10/10.
  */
-public class MyCrawler extends WebCrawler{
+public class MusicCrawler extends WebCrawler{
 
-    private Logger logger = LoggerFactory.getLogger(MyCrawler.class);
+    private Logger logger = LoggerFactory.getLogger(MusicCrawler.class);
 
     private int repeatCount = 0;
 
