@@ -55,10 +55,14 @@ public class SpiderUtil {
                     .data(ImmutableMap.of("params", encText, "encSecKey", encSecKey)).execute();
 
             Map<String,Object> result = JsonUtil.fromJson(response.body(),Map.class);
-            return result.get("total").toString();
+            if(result != null)
+                return result.get("total").toString();
+            else
+                return null;
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             logger.error("getCommentCountError : " + e.getMessage());
         }
         return null;
