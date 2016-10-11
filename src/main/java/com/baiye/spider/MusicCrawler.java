@@ -1,12 +1,14 @@
 package com.baiye.spider;
 
 import com.baiye.utils.AuthData;
+import com.baiye.utils.SingleBlockingQueue;
 import com.baiye.utils.SpiderUtil;
 import com.baiye.entity.Music;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +16,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
 /**
@@ -31,6 +34,8 @@ public class MusicCrawler extends WebCrawler{
     private final static List<Music> musics = new ArrayList<Music>();
 
     private final static SpiderUtil spiderUtil = new SpiderUtil();
+
+    private LinkedBlockingQueue<Music> queue = SingleBlockingQueue.getInstance();
 
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
@@ -56,13 +61,13 @@ public class MusicCrawler extends WebCrawler{
                 String text = htmlParseData.getText();
                 String html = htmlParseData.getHtml();
 
-                Set<WebURL> links = htmlParseData.getOutgoingUrls();
+              /*  Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
                 System.out.println("Text length: " + text.length());
                 System.out.println("Html length: " + html.length());
                 System.out.println("Number of outgoing links: " + links.size());
 
-
+*/
                 int musicNameIndexStart = text.indexOf("生成外链播放器") + 8;
                 int musicNameIndexEnd = text.indexOf("歌手");
                 String musicName = text.substring(musicNameIndexStart,musicNameIndexEnd).trim();
@@ -86,26 +91,21 @@ public class MusicCrawler extends WebCrawler{
                 String commentCount = spiderUtil.getCommentCount(url);
 
                 music.setSongURL(url);
-
-                music.setCommentCount(BigInteger.valueOf(Long.parseLong(commentCount)));
-
-                logger.info(music.toString());
-
-                musics.add(music);
-
-                int allCount = 0;
-                int tempCount = 0;
-
-                allCount = musics.size() + tempCount;
-
-                if(musics.size() > 10000)
+                if(commentCount != null)
                 {
-                    tempCount += musics.size();
-                    musics.clear();
+                    music.setCommentCount(BigInteger.valueOf(Long.parseLong(commentCount)));
+                }
+                else
+                {
+                    music.setCommentCount(BigInteger.valueOf(Long.parseLong("0")));
+                }
+                try {
+                    if(music.isValid())
+                        queue.put(music);
+                } catch (InterruptedException e) {
+                    logger.error("放数据入队列失败：" + e.getMessage());
                 }
 
-
-                logger.info("AllCount：" + allCount);
 
             }
         }

@@ -2,6 +2,7 @@ package com.baiye.DAO;
 
 import com.baiye.DB.DBConf;
 import com.baiye.DB.SQL;
+import com.baiye.entity.DuplicateRemoval;
 import com.baiye.entity.Music;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ArrayHandler;
@@ -81,6 +82,21 @@ public class MusicDAO {
             logger.error("查询去重表失败" + e.getMessage());
         }
         return null;
+    }
+
+    public boolean insertDuplicateRemoval(DuplicateRemoval duplicateRemoval)
+    {
+        queryRunner = getQueryRunner();
+
+        try {
+
+            int i = queryRunner.update(getConnection(),SQL.DUPLICATE_REMOVAL_INSERT_SQL,duplicateRemoval.getMd5());
+            return i==1;
+        } catch (SQLException e) {
+            logger.error("插入单条音乐信息失败：" + e.getMessage());
+        }
+        return false;
+
     }
 
 

@@ -1,5 +1,7 @@
 package com.baiye.entity;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.math.BigInteger;
 
 /**
@@ -55,6 +57,14 @@ public class Music {
 
     public void setSongURL(String songURL) {
         this.songURL = songURL;
+    }
+
+    public boolean isValid()
+    {
+        if(StringUtils.isNotBlank(getName()) && StringUtils.isNotBlank(getArtistName()) && StringUtils.isNotBlank(getAlbumName())
+                && StringUtils.isNotBlank(getSongURL()))
+            return true;
+        return false;
     }
 
     @Override

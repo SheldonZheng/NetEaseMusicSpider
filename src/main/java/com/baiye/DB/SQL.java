@@ -20,4 +20,8 @@ public class SQL {
             "\tDuplicateRemoval\n" +
             "WHERE\n" +
             "\tmd5 = ?";
+
+    public final static String DUPLICATE_REMOVAL_INSERT_SQL = "INSERT INTO DuplicateRemoval (md5)\n" +
+            "VALUES\n" +
+            "\t(?)";
 }
