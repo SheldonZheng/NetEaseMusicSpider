@@ -1,5 +1,7 @@
 package com.baiye.entity;
 
+import java.math.BigInteger;
+
 /**
  * Created by Baiye on 2016/10/10.
  */
@@ -11,7 +13,7 @@ public class Music {
 
     private String albumName;
 
-    private String commentCount;
+    private BigInteger commentCount;
 
     private String songURL;
 
@@ -39,11 +41,11 @@ public class Music {
         this.albumName = albumName;
     }
 
-    public String getCommentCount() {
+    public BigInteger getCommentCount() {
         return commentCount;
     }
 
-    public void setCommentCount(String commentCount) {
+    public void setCommentCount(BigInteger commentCount) {
         this.commentCount = commentCount;
     }
 

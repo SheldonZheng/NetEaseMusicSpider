@@ -10,6 +10,7 @@ import edu.uci.ics.crawler4j.url.WebURL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -86,7 +87,7 @@ public class MusicCrawler extends WebCrawler{
 
                 music.setSongURL(url);
 
-                music.setCommentCount(commentCount);
+                music.setCommentCount(BigInteger.valueOf(Long.parseLong(commentCount)));
 
                 logger.info(music.toString());
 
