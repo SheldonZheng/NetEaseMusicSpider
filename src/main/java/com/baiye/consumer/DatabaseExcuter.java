@@ -25,8 +25,6 @@ public class DatabaseExcuter implements Runnable {
             try {
 
                 Music music = queue.take();
-
-                System.out.println(music.toString());
                 musicDAO.insertMusic(music);
             } catch (InterruptedException e) {
                 logger.error("从队列中获取数据失败：" + e.getMessage());
