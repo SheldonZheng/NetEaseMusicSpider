@@ -2,20 +2,12 @@ package com.baiye.spider;
 
 import com.baiye.utils.AuthData;
 import com.baiye.utils.SingleBlockingQueue;
-import com.baiye.utils.SpiderUtil;
-import com.baiye.entity.Music;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
-import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
@@ -30,9 +22,10 @@ public class MusicCrawler extends WebCrawler{
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp3|zip|gz))$");
 
 
-    private final static SpiderUtil spiderUtil = new SpiderUtil();
 
-    private LinkedBlockingQueue<Music> queue = SingleBlockingQueue.getInstance();
+    //private LinkedBlockingQueue<Music> queue = SingleBlockingQueue.getMusicDatabaseInsertQueue();
+
+    private LinkedBlockingQueue<Page> pageExcuterQueue = SingleBlockingQueue.getPageWaitQueue();
 
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
@@ -49,10 +42,17 @@ public class MusicCrawler extends WebCrawler{
 
         if(url.indexOf("song?id") > 0)
         {
-        if(AuthData.authData(url))
+        if(AuthData.authDuplicateRemoval(url))
         {
-            if(page.getParseData() instanceof HtmlParseData)
+            try {
+                pageExcuterQueue.put(page);
+            } catch (InterruptedException e) {
+                logger.error("放Page数据入队列失败：" + e.getMessage() + e.getStackTrace());
+            }
+
+           /* if(page.getParseData() instanceof HtmlParseData)
             {
+
                 Music music = new Music();
                 HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
                 String text = htmlParseData.getText();
@@ -91,7 +91,7 @@ public class MusicCrawler extends WebCrawler{
                 }
 
 
-            }
+            }*/
         }
 
         }

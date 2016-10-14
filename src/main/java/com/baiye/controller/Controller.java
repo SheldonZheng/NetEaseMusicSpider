@@ -1,6 +1,9 @@
 package com.baiye.controller;
 
-import com.baiye.consumer.DatabaseExcuter;
+import com.baiye.consumer.DupilicateRemovelDatabaseExcuter;
+import com.baiye.consumer.GetCommentCountExcuter;
+import com.baiye.consumer.MusicDatabaseExcuter;
+import com.baiye.consumer.PageExcuter;
 import com.baiye.spider.MusicCrawler;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -23,9 +26,10 @@ public class Controller {
 
         Logger logger = LoggerFactory.getLogger(Controller.class);
         String crawlStorageFolder = args[0];
-        int numberOfCrawlers = 7;
+        int numberOfCrawlers = Integer.valueOf(args[1]);
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
+        config.setPolitenessDelay(Integer.valueOf(args[2]));
 
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
@@ -37,9 +41,15 @@ public class Controller {
 
 
         logger.info("Spider Started.");
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
-        DatabaseExcuter databaseExcuter = new DatabaseExcuter();
-        executorService.execute(databaseExcuter);
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        MusicDatabaseExcuter musicDatabaseExcuter = new MusicDatabaseExcuter();
+        DupilicateRemovelDatabaseExcuter dupilicateRemovelDatabaseExcuter = new DupilicateRemovelDatabaseExcuter();
+        GetCommentCountExcuter getCommentCountExcuter = new GetCommentCountExcuter();
+        PageExcuter pageExcuter = new PageExcuter();
+        executorService.execute(musicDatabaseExcuter);
+        executorService.execute(dupilicateRemovelDatabaseExcuter);
+        executorService.execute(getCommentCountExcuter);
+        executorService.execute(pageExcuter);
         controller.start(MusicCrawler.class,numberOfCrawlers);
 
     }

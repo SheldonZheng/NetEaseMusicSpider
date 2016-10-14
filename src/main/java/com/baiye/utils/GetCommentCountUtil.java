@@ -19,10 +19,10 @@ import java.util.Map;
 /**
  * Created by Baiye on 2016/10/10.
  */
-public class SpiderUtil {
+public class GetCommentCountUtil {
 
 
-    private Logger logger = LoggerFactory.getLogger(SpiderUtil.class);
+    private Logger logger = LoggerFactory.getLogger(GetCommentCountUtil.class);
 
     public static final String text = "{\"username\": \"\", \"rememberLogin\": \"true\", \"password\": \"\"}";
 
@@ -37,14 +37,12 @@ public class SpiderUtil {
 
     public static void main(String[] args) throws Exception {
 
-        SpiderUtil ut = new SpiderUtil();
+        GetCommentCountUtil ut = new GetCommentCountUtil();
         System.out.println(ut.getCommentCount("http://music.163.com/song?id=5179544"));
 
     }
 
-    public String getCommentCount(String baesURL) {
-        try
-        {
+    public String getCommentCount(String baesURL) throws Exception {
             String id = baesURL.substring(baesURL.indexOf("=") + 1,baesURL.length());
             String secKey = new BigInteger(100, new SecureRandom()).toString(32).substring(0, 16);
             String encText = aesEncrypt(aesEncrypt(text, "0CoJUm6Qyw8W8jud"), secKey);
@@ -59,13 +57,8 @@ public class SpiderUtil {
                 return result.get("total").toString();
             else
                 return null;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            logger.error("getCommentCountError : " + e.getMessage());
-        }
-        return null;
+
+
     }
 
 

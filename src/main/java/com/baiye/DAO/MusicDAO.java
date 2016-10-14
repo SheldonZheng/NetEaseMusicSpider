@@ -19,17 +19,12 @@ import java.util.Map;
 /**
  * Created by Baiye on 2016/10/11.
  */
-public class MusicDAO {
+public class MusicDAO extends BaseDAO{
 
     private Logger logger = LoggerFactory.getLogger(MusicDAO.class);
 
-    private Connection conn;
-
     private QueryRunner queryRunner;
 
-    private ArrayHandler arrayHandler;
-
-    private MapHandler mapHandler;
 
 
 
@@ -37,7 +32,7 @@ public class MusicDAO {
 
 
     public MusicDAO() {
-        init();
+        super.init();
     }
 
     public boolean insertMusic(Music music)
@@ -72,79 +67,8 @@ public class MusicDAO {
         return false;
     }
 
-    public Map findDuplicateRemoval(String md5)
-    {
-        queryRunner = getQueryRunner();
-
-        try {
-            return queryRunner.query(getConnection(), SQL.DUPILICATE_REMOVAL_SELECT_SQL,md5,getMapHandler());
-        } catch (SQLException e) {
-            logger.error("查询去重表失败" + e.getMessage());
-        }
-        return null;
-    }
-
-    public boolean insertDuplicateRemoval(DuplicateRemoval duplicateRemoval)
-    {
-        queryRunner = getQueryRunner();
-
-        try {
-
-            int i = queryRunner.update(getConnection(),SQL.DUPLICATE_REMOVAL_INSERT_SQL,duplicateRemoval.getMd5());
-            return i==1;
-        } catch (SQLException e) {
-            logger.error("插入单条音乐信息失败：" + e.getMessage());
-        }
-        return false;
-
-    }
 
 
 
-    private Connection getConnection()
-    {
-        if(conn != null)
-            return conn;
-        try {
-            Class.forName(DBConf.JDBC_DRIVER);
-            conn = DriverManager.getConnection(DBConf.DB_URL,DBConf.USER,DBConf.PASS);
 
-            return conn;
-        } catch (ClassNotFoundException e) {
-            logger.error("未找到数据库驱动：" + e.getMessage());
-        } catch (SQLException e) {
-            logger.error("获取数据库连接失败：" + e.getMessage());
-        }
-        return null;
-    }
-
-
-    private void init()
-    {
-        getConnection();
-        getQueryRunner();
-        getArrayHandler();
-        getMapHandler();
-    }
-
-    public QueryRunner getQueryRunner() {
-        if(queryRunner != null)
-            return queryRunner;
-        queryRunner = new QueryRunner();
-        return queryRunner;
-    }
-
-    public ArrayHandler getArrayHandler() {
-        if(arrayHandler != null)
-            return arrayHandler;
-        arrayHandler = new ArrayHandler();
-        return arrayHandler;
-    }
-
-    public MapHandler getMapHandler() {
-        if(mapHandler != null)
-            return mapHandler;
-        mapHandler = new MapHandler();
-        return mapHandler;
-    }
 }
