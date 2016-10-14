@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2016-10-11 14:48:40
+Date: 2016-10-14 15:17:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,8 +22,9 @@ DROP TABLE IF EXISTS `DuplicateRemoval`;
 CREATE TABLE `DuplicateRemoval` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `md5` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`ID`),
+  KEY `md5` (`md5`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=827660 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for MusicInfo
@@ -31,10 +32,12 @@ CREATE TABLE `DuplicateRemoval` (
 DROP TABLE IF EXISTS `MusicInfo`;
 CREATE TABLE `MusicInfo` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(100) NOT NULL,
-  `Artist` varchar(100) NOT NULL,
-  `Album` varchar(100) NOT NULL,
-  `CommentCount` varchar(100) NOT NULL,
-  `URL` varchar(100) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `Name` varchar(1000) NOT NULL,
+  `Artist` varchar(1000) NOT NULL,
+  `Album` varchar(1000) NOT NULL,
+  `CommentCount` bigint(255) NOT NULL,
+  `URL` varchar(1000) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `ID` (`ID`) USING BTREE,
+  KEY `CommentCount` (`CommentCount`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=827090 DEFAULT CHARSET=utf8mb4;
